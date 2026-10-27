@@ -325,6 +325,7 @@ Mac の仮想カメラとして Zoom・Discord・ブラウザなどに出すア�
 
 - 検証に使う端末（iPhone / iPad の機種、Mac の機種、Vision Pro の有無）
 - 同梱するサンプルアバター。CC0 の候補は [Open Source Avatars](https://github.com/ToxSam/open-source-avatars) の 100Avatars・Xmas Chibis など。各 VRM の meta の利用条件を確かめてから選ぶ
+- 追加する言語（「15. 多言語」の候補から、配信の準備のときに確定する）
 - visionOS 版の役割（ビューアー / トラッカー / 両方）
 - 「Phase 0 検証」の結果で変わりうるもの: 描画の方式（RealityKit のままか、Mac だけ Metal か）、手の推定（Vision か MediaPipe か）
 
