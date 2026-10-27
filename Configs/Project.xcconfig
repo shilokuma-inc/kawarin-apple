@@ -18,5 +18,9 @@ APP_BUNDLE_IDENTIFIER = jp.shilokuma.Kawarin
 MARKETING_VERSION = 1.0.0
 CURRENT_PROJECT_VERSION = 1
 
-// 最低サポート OS
-IPHONEOS_DEPLOYMENT_TARGET = 17.0
+// 最低サポート OS（docs/DESIGN.md の「1. 決定事項」）。visionOS は visionOS のターゲットを足すときに XROS_DEPLOYMENT_TARGET = 2.0 を足す
+IPHONEOS_DEPLOYMENT_TARGET = 18.0
+MACOSX_DEPLOYMENT_TARGET = 15.0
+
+// Mac 版は Apple Silicon のみ（Intel Mac の検証をしないため）
+ARCHS[sdk=macosx*] = arm64
