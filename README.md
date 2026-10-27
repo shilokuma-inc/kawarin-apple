@@ -1,9 +1,14 @@
-# Kawarin
+# かわりん -Kawarin-
 
-iOS Application Template (SwiftUI)
+iPhone / iPad のカメラで顔・上半身・手を追い、Mac 上の 3D アバター（VRM / MMD）を動かして、
+Mac の仮想カメラとして Zoom・Discord などに出すアプリです。会議に代わりに出てくれる、かわいい子がコンセプトです。
 
-iOS アプリのリポジトリを新規作成するときの GitHub テンプレートリポジトリです。
-SwiftUI のプロジェクト一式と、ビルド・テスト・Archive・TestFlight 配信までの GitHub Actions ワークフローを含みます。
+- iPhone / iPad: トラッカー（Mac に送る）と、アバターを鏡のように表示する単体モード
+- Mac: アバターの描画と、仮想カメラ（カメラ拡張）への出力
+
+設計と決定事項は [docs/DESIGN.md](docs/DESIGN.md) を参照してください。
+このリポジトリは [shilokuma-inc/template-app-ios](https://github.com/shilokuma-inc/template-app-ios) から作成しました。
+下の「テンプレートの使い方」はテンプレート由来の手順です。
 
 ## Environment
 
