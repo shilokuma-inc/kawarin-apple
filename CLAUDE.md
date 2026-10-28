@@ -57,7 +57,7 @@ swift test --package-path KawarinKit
 
 ## コードレビュー観点
 
-- **顔・体のデータ**: 端末内とローカルネットワーク（自分の Mac）でだけ扱う。保存しない・外部に送らない・ログに値を出さない
+- **顔・体のデータ**: 端末内とローカルネットワーク（自分の Mac）でだけ扱う。保存しない（キャリブレーションの基準値だけは端末内に保存してよい）・外部に送らない・ログに値を出さない。扱いを変えるときは、プライバシーポリシーのページ（shilokuma-web の `https://shilokuma.jp/privacy/kawarin/`）も更新する（docs/DESIGN.md の「13. 権限・署名・プライバシー」）
 - **共通エンジンの依存**: `KawarinKit` の `AvatarCore` / `AvatarFormats` / `AvatarMotion` / `AvatarPhysics` は UIKit・AppKit・ARKit・RealityKit を import しない（visionOS と共通化するため）
 - **信用しない入力**: 受信したパケット（長さ・範囲・NaN）、モデルファイル（巨大なファイル・範囲外のインデックス・zip の外を指すパス）を検証する。ペアリングしていない端末の入力は受けない
 - **ライセンス**: GPL のコード・ライブラリを入れない。同梱するアセット（アバター・テクスチャ）は利用条件を確かめて記録する
