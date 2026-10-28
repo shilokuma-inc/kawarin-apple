@@ -7,8 +7,6 @@ on:
   push:
     branches:
       - main
-      # 一時的: macOS の Archive の署名を確かめるため（確かめたら消す）
-      - ci/issue-7-mac-delivery
   workflow_dispatch:
 
 permissions:
