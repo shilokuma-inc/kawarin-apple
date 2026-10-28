@@ -288,8 +288,10 @@ Mac の仮想カメラとして Zoom・Discord・ブラウザなどに出すア�
 | `KawarinCameraExtension` | App Sandbox、App Group（`CMIOExtensionMachServiceName` と合わせる） |
 
 - 署名は自動署名と App Store Connect API キー（`-allowProvisioningUpdates`）。アプリ本体とカメラ拡張のプロファイルも Xcode が作る
-- 顔・体のデータは端末内とローカルネットワーク（自分の Mac）でだけ扱い、保存しない・開発者に送らない・ログに値を出さない
-- ARKit の顔データは広告などに使えない決まりがあるので、プライバシーポリシーに顔データの扱いを明記する。置き場所は `https://shilokuma.jp/privacy/kawarin/` の予定（まだ公開していない。配信の準備で shilokuma-web の `privacy/apps.json` に足して公開する）
+- 顔・体のデータは端末内とローカルネットワーク（自分の Mac）でだけ扱い、保存しない・開発者に送らない・ログに値を出さない。保存してよいのはキャリブレーションの基準値だけ（端末内）
+- ARKit の顔データは広告などに使えない決まりがあるので、プライバシーポリシーに顔データの扱いを明記した。ページは `https://shilokuma.jp/privacy/kawarin/`（shilokuma-web の `privacy/apps.json`。App Store の `AppStore/metadata/shared.json` の `privacyPolicyUrl` にも入れてある）
+- ページに書いていること: カメラの映像は保存も送信もしない／顔のデータは保存しない（キャリブレーションの値だけ端末内に保存することがある）／動きの数値だけを、ペアリングした Mac に同じネットワーク内か端末どうしの直接の通信で暗号化して送る／仮想カメラの映像は利用者が選んだ会議・配信アプリが受け取る／解析・広告の SDK や運営者のサーバーは無い
+- これを変える設計変更（トラッキングの記録を利用者向けの機能にする、App 内課金や visionOS 版を足す など）では、shilokuma-web のページも更新する
 - 解析・広告・クラッシュ収集の SDK は入れない。App のプライバシーは「データの収集なし」で申告する見込み
 - 各ターゲットに `PrivacyInfo.xcprivacy` を置く
 
@@ -331,7 +333,7 @@ Mac の仮想カメラとして Zoom・Discord・ブラウザなどに出すア�
 - 検証に使う端末（iPhone / iPad の機種、Mac の機種、Vision Pro の有無）
 - 同梱するサンプルアバター。CC0 の候補は [Open Source Avatars](https://github.com/ToxSam/open-source-avatars) の 100Avatars・Xmas Chibis など。各 VRM の meta の利用条件を確かめてから選ぶ
 - 追加する言語（「15. 多言語」の候補から、配信の準備のときに確定する）
-- プライバシーポリシーの公開（`https://shilokuma.jp/privacy/kawarin/`。顔データの扱いを書く。審査に出す前に必要）
+- プライバシーポリシーの本番への公開（ページは shilokuma-web の develop にある。リリースの PR のマージで公開される。審査に出す前に公開されていることを確かめる）
 - visionOS 版の役割（ビューアー / トラッカー / 両方）
 - 「Phase 0 検証」の結果で変わりうるもの: 描画の方式（RealityKit のままか、Mac だけ Metal か）、手の推定（Vision か MediaPipe か）
 
