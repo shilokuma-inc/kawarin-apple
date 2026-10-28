@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- システム設定で拡張の許可を求めるときに出る説明 -->
+	<key>NSSystemExtensionUsageDescription</key>
+	<string>Provides Kawarin's avatar as a camera for video call apps.</string>
+	<key>CMIOExtension</key>
+	<dict>
+		<!-- App Group（$(TeamIdentifierPrefix)$(APP_BUNDLE_IDENTIFIER)）で始める必要がある -->
+		<key>CMIOExtensionMachServiceName</key>
+		<string>$(TeamIdentifierPrefix)$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	</dict>
+</dict>
+</plist>
