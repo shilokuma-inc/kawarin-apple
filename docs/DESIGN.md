@@ -22,7 +22,7 @@ Mac の仮想カメラとして Zoom・Discord・ブラウザなどに出すア�
 | iOS 単体モード | 鏡のようにアバターを表示するだけ（録画・写真は入れない） |
 | 描画 | RealityKit に統一する（visionOS と共通化するため） |
 | CI | テスト・ビルドから TestFlight へのアップロードまで GitHub Actions。Xcode Cloud は使わない |
-| サンプルアバター | 再配布できる無料のもの（CC0 など）を同梱する。見つからなければ自作する |
+| サンプルアバター | VRoid の公式サンプル 7 体（β Ver AvatarSample の CC0 の 4 体と、AvatarSample_A〜C）を同梱する（[docs/SAMPLE_AVATARS.md](SAMPLE_AVATARS.md)） |
 
 ## 2. 全体構成
 
@@ -288,14 +288,17 @@ Mac の仮想カメラとして Zoom・Discord・ブラウザなどに出すア�
 | `KawarinCameraExtension` | App Sandbox、App Group（`CMIOExtensionMachServiceName` と合わせる） |
 
 - 署名は自動署名と App Store Connect API キー（`-allowProvisioningUpdates`）。アプリ本体とカメラ拡張のプロファイルも Xcode が作る
-- 顔・体のデータは端末内とローカルネットワーク（自分の Mac）でだけ扱い、保存しない・開発者に送らない・ログに値を出さない
-- ARKit の顔データは広告などに使えない決まりがあるので、プライバシーポリシーに顔データの扱いを明記する。置き場所は `https://shilokuma.jp/privacy/kawarin/` の予定（まだ公開していない。配信の準備で shilokuma-web の `privacy/apps.json` に足して公開する）
+- 顔・体のデータは端末内とローカルネットワーク（自分の Mac）でだけ扱い、保存しない・開発者に送らない・ログに値を出さない。保存してよいのはキャリブレーションの基準値だけ（端末内）
+- ARKit の顔データは広告などに使えない決まりがあるので、プライバシーポリシーに顔データの扱いを明記した。ページは `https://shilokuma.jp/privacy/kawarin/`（shilokuma-web の `privacy/apps.json`。App Store の `AppStore/metadata/shared.json` の `privacyPolicyUrl` にも入れてある）
+- ページに書いていること: カメラの映像は保存も送信もしない／顔のデータは保存しない（キャリブレーションの値だけ端末内に保存することがある）／動きの数値だけを、ペアリングした Mac に同じネットワーク内か端末どうしの直接の通信で暗号化して送る／仮想カメラの映像は利用者が選んだ会議・配信アプリが受け取る／解析・広告の SDK や運営者のサーバーは無い
+- これを変える設計変更（トラッキングの記録を利用者向けの機能にする、App 内課金や visionOS 版を足す など）では、shilokuma-web のページも更新する
 - 解析・広告・クラッシュ収集の SDK は入れない。App のプライバシーは「データの収集なし」で申告する見込み
 - 各ターゲットに `PrivacyInfo.xcprivacy` を置く
 
 ## 14. 課金（将来）
 
 - MVP の機能はすべて無料。機能を使えるかを判断する小さな層（`FeatureAccess`）だけをアプリ側に用意し、今はすべて「使える」を返す
+- 同梱の AvatarSample_A〜C は有料での再配布ができないので、課金の対象に入れない（`SampleAvatar.mustStayFree`。docs/SAMPLE_AVATARS.md）
 - 課金を足すときに StoreKit 2 をつなぐ。Universal Purchase なので App 内課金も全プラットフォーム共通（`Transaction.currentEntitlements`）
 - 必要になるもの: 有料 App 契約（銀行口座・税務情報）、購入の復元ボタン、最初の課金アイテムはアプリの新しいバージョンと一緒に審査に出す
 
@@ -319,19 +322,18 @@ Mac の仮想カメラとして Zoom・Discord・ブラウザなどに出すア�
 | --- | --- | --- |
 | 土台 | 設計書、ターゲット構成（iOS・macOS・カメラ拡張）、`KawarinKit` の雛形、最低 OS、CI の macOS 対応 | 人の PR（ターゲットの追加と pbxproj・CI の変更はループに向かない） |
 | 0 検証 | (a) カメラ拡張と sink stream で Zoom・Discord に映す（サンドボックス内のアプリから送れるか、カメラの許可が要るかも確認） (b) `RealityRenderer` で描いて CVPixelBuffer にする (c) ShaderGraph で MToon の影・リム・輪郭線を出し、色が変わらないことを確かめる (d) iPhone で顔＋上半身＋手を同時に動かし、fps・発熱・指の精度を測る (e) Bullet を 3 プラットフォームでビルドする | 実機での確認は `needs-verify` の Issue にする |
-| 1 | 共通コア（共通モデル・VRM 1.0・FK）、変形の compute、RealityKit の簡易な材質、顔の送受信 | ゴールの Discussion からループ |
+| 1 | 共通コア（共通モデル・VRM 0.x / 1.0・FK）、変形の compute、RealityKit の簡易な材質、顔の送受信。同梱のサンプルアバターが VRM 0.x なので、0.x の読み込み（1.0 相当への変換）もここで行う | ゴールの Discussion からループ |
 | 2 | 上半身・手（送信、キャリブレーション、IK、指） | 同上 |
-| 3 | MToon の本実装、輪郭線、spring bone、VRM 0.x | 同上 |
+| 3 | MToon の本実装、輪郭線、spring bone。同梱の β の 4 体（70〜80 万頂点）で iPhone の鏡モードの性能を確かめる | 同上 |
 | 4 | PMX、MMD の材質、モーフ割り当ての UI、Bullet | 同上 |
-| 5 | 配布の準備（Universal Purchase、互換モードを外す、審査用のデモ、プライバシー、多言語、サンプルアバター） | 人とループ |
+| 5 | 配布の準備（Universal Purchase、互換モードを外す、審査用のデモ、プライバシー、多言語、ライセンス画面に同梱アバターの出典） | 人とループ |
 | 将来 | visionOS（ビューアー・トラッカー）、App 内課金の新機能 | 役割を決めてから |
 
 ## 18. 未決事項・要確認
 
 - 検証に使う端末（iPhone / iPad の機種、Mac の機種、Vision Pro の有無）
-- 同梱するサンプルアバター。CC0 の候補は [Open Source Avatars](https://github.com/ToxSam/open-source-avatars) の 100Avatars・Xmas Chibis など。各 VRM の meta の利用条件を確かめてから選ぶ
 - 追加する言語（「15. 多言語」の候補から、配信の準備のときに確定する）
-- プライバシーポリシーの公開（`https://shilokuma.jp/privacy/kawarin/`。顔データの扱いを書く。審査に出す前に必要）
+- プライバシーポリシーの本番への公開（ページは shilokuma-web の develop にある。リリースの PR のマージで公開される。審査に出す前に公開されていることを確かめる）
 - visionOS 版の役割（ビューアー / トラッカー / 両方）
 - 「Phase 0 検証」の結果で変わりうるもの: 描画の方式（RealityKit のままか、Mac だけ Metal か）、手の推定（Vision か MediaPipe か）
 

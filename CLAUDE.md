@@ -27,6 +27,7 @@ Mac の仮想カメラとして Zoom・Discord などに出すアプリ。設計
 - `Configs/*.xcconfig` … Team ID・Bundle ID・バージョン・Deployment Target はここだけを編集する
 - `AppStore/` … App Store の掲載情報（言語・説明文・スクリーンショット・審査メモ）
 - `docs/DESIGN.md` … 設計。パッケージ構成（`KawarinKit`）と依存のルールは「4. パッケージ構成と依存のルール」
+- `docs/SAMPLE_AVATARS.md` … 同梱のサンプルアバター（`KawarinKit` の `SampleAvatars`）と利用条件
 
 ## ビルド・検証
 
@@ -57,10 +58,10 @@ swift test --package-path KawarinKit
 
 ## コードレビュー観点
 
-- **顔・体のデータ**: 端末内とローカルネットワーク（自分の Mac）でだけ扱う。保存しない・外部に送らない・ログに値を出さない
+- **顔・体のデータ**: 端末内とローカルネットワーク（自分の Mac）でだけ扱う。保存しない（キャリブレーションの基準値だけは端末内に保存してよい）・外部に送らない・ログに値を出さない。扱いを変えるときは、プライバシーポリシーのページ（shilokuma-web の `https://shilokuma.jp/privacy/kawarin/`）も更新する（docs/DESIGN.md の「13. 権限・署名・プライバシー」）
 - **共通エンジンの依存**: `KawarinKit` の `AvatarCore` / `AvatarFormats` / `AvatarMotion` / `AvatarPhysics` は UIKit・AppKit・ARKit・RealityKit を import しない（visionOS と共通化するため）
 - **信用しない入力**: 受信したパケット（長さ・範囲・NaN）、モデルファイル（巨大なファイル・範囲外のインデックス・zip の外を指すパス）を検証する。ペアリングしていない端末の入力は受けない
-- **ライセンス**: GPL のコード・ライブラリを入れない。同梱するアセット（アバター・テクスチャ）は利用条件を確かめて記録する
+- **ライセンス**: GPL のコード・ライブラリを入れない。同梱するアセット（アバター・テクスチャ）は利用条件を確かめて記録する。同梱のサンプルアバターは VRM のメタの利用条件を書き換えず、AvatarSample_A〜C を課金の対象に入れない（docs/SAMPLE_AVATARS.md）
 - **Swift Concurrency**: UI 更新は MainActor。`@unchecked Sendable` や `nonisolated(unsafe)` で警告を握りつぶさない
 - **マルチプラットフォーム**: `#if os(...)` は最小限にし、プラットフォーム固有の API（ARKit・CoreMediaIO など）はプロトコルの後ろに隠す
 - **pbxproj**: ループの中では編集しない（壊れやすい）。ターゲットや entitlement、ローカル Swift Package のリンクの変更が要るときは ask にする

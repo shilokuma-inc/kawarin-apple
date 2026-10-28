@@ -12,6 +12,8 @@
 
 ## 仮想カメラ（CMIOExtension）
 
+- カメラ拡張の製品の参照（pbxproj の `….CameraExtension.systemextension`）はパスが固定でも、`Configs/Project.xcconfig` の `APP_BUNDLE_IDENTIFIER` を変えれば新しい名前の拡張が埋め込まれる。ただし `xcodebuild … APP_BUNDLE_IDENTIFIER=…` のコマンドラインの上書きには追従せず、「no such file」で失敗する。System Extension はバンドル名を Bundle ID と同じにする必要があるので、製品名は `$(PRODUCT_BUNDLE_IDENTIFIER)` のままにする
+
 ## トラッキング（ARKit・Vision）
 
 ## 通信

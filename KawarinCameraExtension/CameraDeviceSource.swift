@@ -45,7 +45,10 @@ final class CameraDeviceSource: NSObject, CMIOExtensionDeviceSource, @unchecked 
             kCVPixelBufferPixelFormatTypeKey: CameraConfiguration.pixelFormat,
             kCVPixelBufferIOSurfacePropertiesKey: [CFString: Any]()
         ]
-        CVPixelBufferPoolCreate(kCFAllocatorDefault, nil, pixelBufferAttributes as CFDictionary, &bufferPool)
+        let poolStatus = CVPixelBufferPoolCreate(kCFAllocatorDefault, nil, pixelBufferAttributes as CFDictionary, &bufferPool)
+        guard poolStatus == kCVReturnSuccess, bufferPool != nil else {
+            fatalError("映像のバッファのプールを作れませんでした: \(poolStatus)")
+        }
 
         let streamFormat = CMIOExtensionStreamFormat(
             formatDescription: videoDescription,

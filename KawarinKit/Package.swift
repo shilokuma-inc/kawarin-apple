@@ -12,15 +12,18 @@ let package = Package(
         .visionOS(.v2),
     ],
     products: [
-        .library(name: "KawarinKitIOS", targets: ["AvatarCore", "TrackingProtocol"]),
-        .library(name: "KawarinKitMac", targets: ["AvatarCore", "TrackingProtocol"]),
+        .library(name: "KawarinKitIOS", targets: ["AvatarCore", "TrackingProtocol", "SampleAvatars"]),
+        .library(name: "KawarinKitMac", targets: ["AvatarCore", "TrackingProtocol", "SampleAvatars"]),
     ],
     targets: [
         // 共通モデルと姿勢計算。Swift と simd だけで書き、UIKit・AppKit・ARKit・RealityKit を import しない
         .target(name: "AvatarCore"),
         // iPhone / iPad と Mac の間の送受信の形式。こちらも UI やセンサーの API に依存しない
         .target(name: "TrackingProtocol"),
+        // 同梱するサンプルアバター（VRoid の公式サンプル 7 体、約 137MB）。利用条件は docs/SAMPLE_AVATARS.md
+        .target(name: "SampleAvatars", resources: [.copy("Avatars")]),
         .testTarget(name: "AvatarCoreTests", dependencies: ["AvatarCore"]),
         .testTarget(name: "TrackingProtocolTests", dependencies: ["TrackingProtocol"]),
+        .testTarget(name: "SampleAvatarsTests", dependencies: ["SampleAvatars"]),
     ]
 )
