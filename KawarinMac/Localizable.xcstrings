@@ -1,0 +1,136 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Allow the extension in System Settings > General > Login Items & Extensions.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "システム設定 > 一般 > ログイン項目と機能拡張 で、拡張を許可してください。"
+          }
+        }
+      }
+    },
+    "Failed: %@": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "失敗しました: %@"
+          }
+        }
+      }
+    },
+    "Kawarin Camera": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kawarin Camera"
+          }
+        }
+      }
+    },
+    "Sending the request…": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リクエストを送っています…"
+          }
+        }
+      }
+    },
+    "The app's bundle identifier could not be read.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アプリの Bundle ID を読み取れませんでした。"
+          }
+        }
+      }
+    },
+    "The camera extension has not been turned on from this app yet.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このアプリからはまだカメラ拡張をオンにしていません。"
+          }
+        }
+      }
+    },
+    "The camera extension is off.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラ拡張はオフです。"
+          }
+        }
+      }
+    },
+    "The camera extension is on. Choose “Kawarin Camera” in your video call app.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラ拡張はオンです。ビデオ通話アプリで「Kawarin Camera」を選んでください。"
+          }
+        }
+      }
+    },
+    "The change will take effect after you restart your Mac.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mac を再起動すると反映されます。"
+          }
+        }
+      }
+    },
+    "The request finished with an unknown result.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リクエストが不明な結果で終わりました。"
+          }
+        }
+      }
+    },
+    "Turn Off": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オフにする"
+          }
+        }
+      }
+    },
+    "Turn On Camera Extension": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラ拡張をオンにする"
+          }
+        }
+      }
+    },
+    "Turn on the camera extension to use Kawarin as a camera in video call apps.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラ拡張をオンにすると、ビデオ通話アプリでかわりんをカメラとして使えます。"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
