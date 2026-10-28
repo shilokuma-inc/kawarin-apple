@@ -151,7 +151,9 @@ Upload ワークフローは、アップロードの前に TestFlight の内部�
 - Archive / Upload は Actions タブから手動でも実行できます（Run workflow）。作業ブランチを TestFlight で確認したいときは、Upload を手動実行してそのブランチを選びます
 - リポジトリ変数（Settings → Secrets and variables → Actions → Variables）に `ENABLE_DELIVERY=false` を設定すると Upload をスキップします（Archive は App Store Connect にアプリが無くても通るため止めません）。テンプレートリポジトリ自身はこの設定でアップロードを止めています。テンプレートから作成したリポジトリには引き継がれないため、何もしなければ従来どおり実行されます
 - Archive と Upload は iOS（IPA。スキーム `Kawarin`）と macOS（pkg。スキーム `KawarinMac`、カメラ拡張を含む）を別々のジョブで扱い、macOS が失敗しても iOS は止まりません
-- `ENABLE_MACOS_DELIVERY=false` を設定すると、Upload と Archive の macOS のジョブだけをスキップします。何もしなければ、App Store Connect のアプリに macOS のプラットフォームがあるかを見て自動で決めます
+- `ENABLE_MACOS_DELIVERY=false` を設定すると、Upload と Archive の macOS のジョブだけをスキップします。何もしなければ、次のように動きます
+  - Upload: App Store Connect のアプリに macOS のプラットフォームがあるかを先に確かめ、無ければ macOS の Archive とアップロードを飛ばします
+  - Archive（`main` への push・手動実行）: プラットフォームの有無を確かめずに、macOS も Archive → pkg の Export まで行います。Mac アプリの署名は API キーの自動署名なので、Apple Developer のアカウントに App ID・プロファイル（足りなければ証明書）が作られることがあります
 - ドキュメントだけの変更（`**/*.md`、`docs/**`）では Build を実行しません。Upload（`develop` / `release/**` への push）と Archive（`main` への push）は、ドキュメントだけの変更でも実行します
 - 作業ブランチへの push では、時間のかかる UI テスト（`<プロジェクト名>UITests`）を省いて Unit テストだけ実行します。UI テストは Pull Request の作成時と `main` / `develop` / `release/**` への push で実行します。Fork からの Pull Request は push で実行されないため、更新（synchronize）を含むすべてのイベントで UI テストまで実行します
 - Xcode のバージョンは [.github/workflows/_build.yml](.github/workflows/_build.yml) と [.github/workflows/_archive.yml](.github/workflows/_archive.yml) の `xcode-version` で固定しています。Environment の更新時はあわせて変更してください
