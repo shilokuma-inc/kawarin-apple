@@ -76,6 +76,6 @@ public enum HumanoidBone: String, CaseIterable, Sendable {
         .leftUpperLeg, .leftLowerLeg, .leftFoot,
         .rightUpperLeg, .rightLowerLeg, .rightFoot,
         .leftUpperArm, .leftLowerArm, .leftHand,
-        .rightUpperArm, .rightLowerArm, .rightHand,
+        .rightUpperArm, .rightLowerArm, .rightHand
     ]
 }

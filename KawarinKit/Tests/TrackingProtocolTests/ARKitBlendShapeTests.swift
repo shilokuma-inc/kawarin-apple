@@ -17,7 +17,7 @@ struct ARKitBlendShapeTests {
             "browDownLeft", "browDownRight", "browInnerUp", "browOuterUpLeft", "browOuterUpRight",
             "cheekPuff", "cheekSquintLeft", "cheekSquintRight",
             "noseSneerLeft", "noseSneerRight",
-            "tongueOut",
+            "tongueOut"
         ]
 
         #expect(ARKitBlendShape.allCases.map(\.rawValue) == expected)

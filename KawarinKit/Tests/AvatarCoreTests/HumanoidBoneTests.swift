@@ -1,5 +1,5 @@
-import Testing
 @testable import AvatarCore
+import Testing
 
 struct HumanoidBoneTests {
     @Test func hasAllVRM1Bones() {

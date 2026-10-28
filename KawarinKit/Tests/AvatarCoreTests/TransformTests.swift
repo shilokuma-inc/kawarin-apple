@@ -1,6 +1,6 @@
+@testable import AvatarCore
 import simd
 import Testing
-@testable import AvatarCore
 
 struct TransformTests {
     @Test func identityIsIdentityMatrix() {
