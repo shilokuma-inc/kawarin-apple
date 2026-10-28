@@ -26,5 +26,17 @@ jobs:
     if: vars.ENABLE_DELIVERY != 'false'
     uses: ./.github/workflows/_archive.yml
     with:
+      platform: iOS
+      upload: true
+    secrets: inherit
+
+  upload-macos:
+    # iOS とは別のジョブにし、macOS が失敗しても iOS のアップロードは止めない（macOS のランナーを 2 台並べて使う）。
+    # App Store Connect のアプリに macOS のプラットフォームが無いうちは、_archive.yml が確かめて archive を飛ばす（失敗にしない）。
+    # macOS だけを止めたいときはリポジトリ変数 ENABLE_MACOS_DELIVERY=false にする
+    if: vars.ENABLE_DELIVERY != 'false' && vars.ENABLE_MACOS_DELIVERY != 'false'
+    uses: ./.github/workflows/_archive.yml
+    with:
+      platform: macOS
       upload: true
     secrets: inherit

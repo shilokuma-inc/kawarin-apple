@@ -122,6 +122,8 @@ App Store Connect でのアプリ作成だけは API で行えないため、Web
 
 SKU は Bundle ID と同じ値にします。SKU はユーザーには見えない社内用の ID で、後から変更できないため、迷わないようにルールを固定しています。
 
+Mac 版は iOS と同じ Bundle ID の同じアプリ（Universal Purchase）として配ります。作成したアプリを開き、サイドバーのプラットフォームの横の「＋」から macOS を追加してください。追加するまでは、Upload の macOS のジョブはアップロードを飛ばし、追加の手順を Job Summary に出します（失敗にはしません）。
+
 #### TestFlight の内部テスター
 
 Upload ワークフローは、アップロードの前に TestFlight の内部テストグループ「Internal Testers」を作り、変数 `TESTFLIGHT_INTERNAL_TESTERS` のメールアドレスを内部テスターに追加します（[.github/scripts/ensure-internal-testers.rb](.github/scripts/ensure-internal-testers.rb)）。グループは「すべてのビルドへのアクセス」を有効にして作るため、以降のビルドは処理が終わりしだい自動で配信されます。2 回目以降の Upload では確認だけで何もしません。
@@ -136,7 +138,7 @@ Upload ワークフローは、アップロードの前に TestFlight の内部�
 
 ### 6. ブランチ運用と CI
 
-| ブランチ | Build（ビルド + テスト + SwiftLint） | Archive（IPA Export） | Upload（App Store Connect） |
+| ブランチ | Build（ビルド + テスト + SwiftLint） | Archive（IPA / pkg の Export） | Upload（App Store Connect。iOS / macOS） |
 |---|:-:|:-:|:-:|
 | `main` | ✅ | ✅ | |
 | `develop` | ✅ | | ✅ |
@@ -148,6 +150,10 @@ Upload ワークフローは、アップロードの前に TestFlight の内部�
 - Upload は Archive → IPA Export を含むため、`develop` / `release/**` では Archive を別途実行しません
 - Archive / Upload は Actions タブから手動でも実行できます（Run workflow）。作業ブランチを TestFlight で確認したいときは、Upload を手動実行してそのブランチを選びます
 - リポジトリ変数（Settings → Secrets and variables → Actions → Variables）に `ENABLE_DELIVERY=false` を設定すると Upload をスキップします（Archive は App Store Connect にアプリが無くても通るため止めません）。テンプレートリポジトリ自身はこの設定でアップロードを止めています。テンプレートから作成したリポジトリには引き継がれないため、何もしなければ従来どおり実行されます
+- Archive と Upload は iOS（IPA。スキーム `Kawarin`）と macOS（pkg。スキーム `KawarinMac`、カメラ拡張を含む）を別々のジョブで扱い、macOS が失敗しても iOS は止まりません
+- `ENABLE_MACOS_DELIVERY=false` を設定すると、Upload と Archive の macOS のジョブだけをスキップします。何もしなければ、次のように動きます
+  - Upload: App Store Connect のアプリに macOS のプラットフォームがあるかを先に確かめ、無ければ macOS の Archive とアップロードを飛ばします
+  - Archive（`main` への push・手動実行）: プラットフォームの有無を確かめずに、macOS も Archive → pkg の Export まで行います。Mac アプリの署名は API キーの自動署名なので、Apple Developer のアカウントに App ID・プロファイル（足りなければ証明書）が作られることがあります
 - ドキュメントだけの変更（`**/*.md`、`docs/**`）では Build を実行しません。Upload（`develop` / `release/**` への push）と Archive（`main` への push）は、ドキュメントだけの変更でも実行します
 - 作業ブランチへの push では、時間のかかる UI テスト（`<プロジェクト名>UITests`）を省いて Unit テストだけ実行します。UI テストは Pull Request の作成時と `main` / `develop` / `release/**` への push で実行します。Fork からの Pull Request は push で実行されないため、更新（synchronize）を含むすべてのイベントで UI テストまで実行します
 - Xcode のバージョンは [.github/workflows/_build.yml](.github/workflows/_build.yml) と [.github/workflows/_archive.yml](.github/workflows/_archive.yml) の `xcode-version` で固定しています。Environment の更新時はあわせて変更してください

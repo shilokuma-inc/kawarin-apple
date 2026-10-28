@@ -1,6 +1,6 @@
 name: Archive
 
-# main への push で Archive → IPA Export まで通ることを確認する（アップロードはしない）。
+# main への push で Archive → Export（iOS は IPA、macOS は pkg）まで通ることを確認する（アップロードはしない）。
 # develop / release/** は upload.yml が Archive を含むため、ここでは実行しない。
 # 必要なときに手動でも確認できるよう workflow_dispatch も置く。
 on:
@@ -20,5 +20,15 @@ jobs:
   archive:
     uses: ./.github/workflows/_archive.yml
     with:
+      platform: iOS
+      upload: false
+    secrets: inherit
+
+  archive-macos:
+    # iOS とは別のジョブにし、macOS が失敗しても iOS の確認は止めない
+    if: vars.ENABLE_MACOS_DELIVERY != 'false'
+    uses: ./.github/workflows/_archive.yml
+    with:
+      platform: macOS
       upload: false
     secrets: inherit
