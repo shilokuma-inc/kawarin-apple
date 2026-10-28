@@ -7,6 +7,9 @@
 
 ## ビルド・テスト・CI
 
+- Mac アプリ（KawarinMac）は `com.apple.developer.system-extension.install` と App Group の entitlement を持つため、アドホック署名（`CODE_SIGN_IDENTITY=-`、`CODE_SIGNING_REQUIRED=NO` を足しても）の `xcodebuild archive` は 「requires a provisioning profile」で失敗する。ビルドの確認だけなら `CODE_SIGNING_ALLOWED=NO`、Archive はプロファイルを使う署名にする
+- 署名せずにビルドした Mac アプリは起動できず、カメラ拡張も有効にできない。画面の見た目だけを確かめるなら、`CODE_SIGN_ENTITLEMENTS=` を空にしてアドホック署名でビルドすると起動できる
+
 ## 仮想カメラ（CMIOExtension）
 
 ## トラッキング（ARKit・Vision）
