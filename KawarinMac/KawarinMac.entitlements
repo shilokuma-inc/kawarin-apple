@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Mac App Store で配るため App Sandbox を有効にする -->
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<!-- カメラ拡張（KawarinCameraExtension）と共有する App Group。拡張の CMIOExtensionMachServiceName はこの名前で始める -->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>$(TeamIdentifierPrefix)$(APP_BUNDLE_IDENTIFIER)</string>
+	</array>
+	<!-- カメラ拡張（System Extension）を有効にするため -->
+	<key>com.apple.developer.system-extension.install</key>
+	<true/>
+</dict>
+</plist>

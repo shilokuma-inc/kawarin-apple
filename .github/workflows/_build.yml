@@ -84,6 +84,20 @@ jobs:
             -parallel-testing-enabled NO \
             ${options[@]+"${options[@]}"}
 
+      - name: Test KawarinKit
+        # iOS・macOS・visionOS で共有するパッケージ。UI に依存しないので macOS のホストで実行する
+        run: swift test --package-path KawarinKit
+
+      - name: Build macOS app
+        # Mac アプリ（<プロジェクト名>Mac）とカメラ拡張。CI には Mac の署名用証明書が無いので署名せずにビルドする
+        run: |
+          xcodebuild build \
+            -project "$PROJECT_NAME.xcodeproj" \
+            -scheme "${SCHEME}Mac" \
+            -destination 'platform=macOS' \
+            -derivedDataPath DerivedData \
+            CODE_SIGNING_ALLOWED=NO
+
       - name: Upload test results
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7

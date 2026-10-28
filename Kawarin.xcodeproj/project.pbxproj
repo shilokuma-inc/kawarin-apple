@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4FB0000000000000000000B0 /* jp.shilokuma.Kawarin.CameraExtension.systemextension in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = 4FB0000000000000000000C2 /* jp.shilokuma.Kawarin.CameraExtension.systemextension */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4FB0000000000000000000B2 /* KawarinKitMac in Frameworks */ = {isa = PBXBuildFile; productRef = 4FB0000000000000000000B1 /* KawarinKitMac */; };
+		4FB0000000000000000000D3 /* KawarinKitIOS in Frameworks */ = {isa = PBXBuildFile; productRef = 4FB0000000000000000000D2 /* KawarinKitIOS */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		4FC9E1FA2BF1049C00F630AB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,7 +27,28 @@
 			remoteGlobalIDString = 4FC9E1E82BF1049B00F630AB;
 			remoteInfo = Kawarin;
 		};
+		4FB0000000000000000000AF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4FC9E1E12BF1049B00F630AB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4FB0000000000000000000C1;
+			remoteInfo = KawarinCameraExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4FB0000000000000000000A8 /* Embed System Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(SYSTEM_EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+				4FB0000000000000000000B0 /* jp.shilokuma.Kawarin.CameraExtension.systemextension in Embed System Extensions */,
+			);
+			name = "Embed System Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4FC9E1E92BF1049B00F630AB /* Kawarin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kawarin.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -30,6 +57,8 @@
 		4FA0000000000000000000C1 /* Project.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		4FA0000000000000000000C2 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		4FA0000000000000000000C3 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		4FB0000000000000000000A2 /* Kawarin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kawarin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FB0000000000000000000C2 /* jp.shilokuma.Kawarin.CameraExtension.systemextension */ = {isa = PBXFileReference; explicitFileType = "wrapper.system-extension"; includeInIndex = 0; path = jp.shilokuma.Kawarin.CameraExtension.systemextension; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -39,6 +68,22 @@
 				Info.plist,
 			);
 			target = 4FC9E1E82BF1049B00F630AB /* Kawarin */;
+		};
+		4FB0000000000000000000A4 /* Exceptions for "KawarinMac" folder in "KawarinMac" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+				KawarinMac.entitlements,
+			);
+			target = 4FB0000000000000000000A1 /* KawarinMac */;
+		};
+		4FB0000000000000000000C4 /* Exceptions for "KawarinCameraExtension" folder in "KawarinCameraExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+				KawarinCameraExtension.entitlements,
+			);
+			target = 4FB0000000000000000000C1 /* KawarinCameraExtension */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -61,6 +106,22 @@
 			path = KawarinUITests;
 			sourceTree = "<group>";
 		};
+		4FB0000000000000000000A3 /* KawarinMac */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4FB0000000000000000000A4 /* Exceptions for "KawarinMac" folder in "KawarinMac" target */,
+			);
+			path = KawarinMac;
+			sourceTree = "<group>";
+		};
+		4FB0000000000000000000C3 /* KawarinCameraExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4FB0000000000000000000C4 /* Exceptions for "KawarinCameraExtension" folder in "KawarinCameraExtension" target */,
+			);
+			path = KawarinCameraExtension;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +129,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FB0000000000000000000D3 /* KawarinKitIOS in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +147,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4FB0000000000000000000A6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FB0000000000000000000B2 /* KawarinKitMac in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FB0000000000000000000C6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -94,6 +171,8 @@
 				4FA0000000000000000000B1 /* Kawarin */,
 				4FA0000000000000000000B2 /* KawarinTests */,
 				4FA0000000000000000000B3 /* KawarinUITests */,
+				4FB0000000000000000000A3 /* KawarinMac */,
+				4FB0000000000000000000C3 /* KawarinCameraExtension */,
 				4FC9E1EA2BF1049B00F630AB /* Products */,
 				4FA0000000000000000000C0 /* Configs */,
 			);
@@ -105,6 +184,8 @@
 				4FC9E1E92BF1049B00F630AB /* Kawarin.app */,
 				4FC9E1F92BF1049C00F630AB /* KawarinTests.xctest */,
 				4FC9E2032BF1049C00F630AB /* KawarinUITests.xctest */,
+				4FB0000000000000000000A2 /* Kawarin.app */,
+				4FB0000000000000000000C2 /* jp.shilokuma.Kawarin.CameraExtension.systemextension */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -139,6 +220,9 @@
 				4FA0000000000000000000B1 /* Kawarin */,
 			);
 			name = Kawarin;
+			packageProductDependencies = (
+				4FB0000000000000000000D2 /* KawarinKitIOS */,
+			);
 			productName = Kawarin;
 			productReference = 4FC9E1E92BF1049B00F630AB /* Kawarin.app */;
 			productType = "com.apple.product-type.application";
@@ -187,6 +271,53 @@
 			productReference = 4FC9E2032BF1049C00F630AB /* KawarinUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		4FB0000000000000000000A1 /* KawarinMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4FB0000000000000000000A9 /* Build configuration list for PBXNativeTarget "KawarinMac" */;
+			buildPhases = (
+				4FB0000000000000000000A5 /* Sources */,
+				4FB0000000000000000000A6 /* Frameworks */,
+				4FB0000000000000000000A7 /* Resources */,
+				4FB0000000000000000000A8 /* Embed System Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4FB0000000000000000000AC /* PBXTargetDependency */,
+				4FB0000000000000000000AE /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4FB0000000000000000000A3 /* KawarinMac */,
+			);
+			name = KawarinMac;
+			packageProductDependencies = (
+				4FB0000000000000000000B1 /* KawarinKitMac */,
+			);
+			productName = KawarinMac;
+			productReference = 4FB0000000000000000000A2 /* Kawarin.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4FB0000000000000000000C1 /* KawarinCameraExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4FB0000000000000000000C9 /* Build configuration list for PBXNativeTarget "KawarinCameraExtension" */;
+			buildPhases = (
+				4FB0000000000000000000C5 /* Sources */,
+				4FB0000000000000000000C6 /* Frameworks */,
+				4FB0000000000000000000C7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4FB0000000000000000000CC /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4FB0000000000000000000C3 /* KawarinCameraExtension */,
+			);
+			name = KawarinCameraExtension;
+			productName = KawarinCameraExtension;
+			productReference = 4FB0000000000000000000C2 /* jp.shilokuma.Kawarin.CameraExtension.systemextension */;
+			productType = "com.apple.product-type.system-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -208,6 +339,12 @@
 						CreatedOnToolsVersion = 15.3;
 						TestTargetID = 4FC9E1E82BF1049B00F630AB;
 					};
+					4FB0000000000000000000A1 = {
+						CreatedOnToolsVersion = 26.3;
+					};
+					4FB0000000000000000000C1 = {
+						CreatedOnToolsVersion = 26.3;
+					};
 				};
 			};
 			buildConfigurationList = 4FC9E1E42BF1049B00F630AB /* Build configuration list for PBXProject "Kawarin" */;
@@ -216,11 +353,13 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 4FC9E1E02BF1049B00F630AB;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				4F27869D2BF373B800E9F5EF /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+				4FB0000000000000000000D1 /* XCLocalSwiftPackageReference "KawarinKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4FC9E1EA2BF1049B00F630AB /* Products */;
@@ -230,6 +369,8 @@
 				4FC9E1E82BF1049B00F630AB /* Kawarin */,
 				4FC9E1F82BF1049C00F630AB /* KawarinTests */,
 				4FC9E2022BF1049C00F630AB /* KawarinUITests */,
+				4FB0000000000000000000A1 /* KawarinMac */,
+				4FB0000000000000000000C1 /* KawarinCameraExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -250,6 +391,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		4FC9E2012BF1049C00F630AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FB0000000000000000000A7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FB0000000000000000000C7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -280,6 +435,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4FB0000000000000000000A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FB0000000000000000000C5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -304,6 +473,19 @@
 		4FA0000000000000000000E1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 4FA0000000000000000000E2 /* SwiftLintBuildToolPlugin */;
+		};
+		4FB0000000000000000000AC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 4FB0000000000000000000AD /* SwiftLintBuildToolPlugin */;
+		};
+		4FB0000000000000000000AE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4FB0000000000000000000C1 /* KawarinCameraExtension */;
+			targetProxy = 4FB0000000000000000000AF /* PBXContainerItemProxy */;
+		};
+		4FB0000000000000000000CC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 4FB0000000000000000000CD /* SwiftLintBuildToolPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -551,6 +733,106 @@
 			};
 			name = Release;
 		};
+		4FB0000000000000000000AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = KawarinMac/KawarinMac.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KawarinMac/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Kawarin;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_IDENTIFIER)";
+				PRODUCT_MODULE_NAME = KawarinMac;
+				PRODUCT_NAME = Kawarin;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		4FB0000000000000000000AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = KawarinMac/KawarinMac.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KawarinMac/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Kawarin;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_IDENTIFIER)";
+				PRODUCT_MODULE_NAME = KawarinMac;
+				PRODUCT_NAME = Kawarin;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		4FB0000000000000000000CA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = KawarinCameraExtension/KawarinCameraExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KawarinCameraExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Kawarin Camera";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_IDENTIFIER).CameraExtension";
+				PRODUCT_MODULE_NAME = KawarinCameraExtension;
+				PRODUCT_NAME = "$(PRODUCT_BUNDLE_IDENTIFIER)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		4FB0000000000000000000CB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = KawarinCameraExtension/KawarinCameraExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KawarinCameraExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Kawarin Camera";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_IDENTIFIER).CameraExtension";
+				PRODUCT_MODULE_NAME = KawarinCameraExtension;
+				PRODUCT_NAME = "$(PRODUCT_BUNDLE_IDENTIFIER)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -590,7 +872,32 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		4FB0000000000000000000A9 /* Build configuration list for PBXNativeTarget "KawarinMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FB0000000000000000000AA /* Debug */,
+				4FB0000000000000000000AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4FB0000000000000000000C9 /* Build configuration list for PBXNativeTarget "KawarinCameraExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FB0000000000000000000CA /* Debug */,
+				4FB0000000000000000000CB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		4FB0000000000000000000D1 /* XCLocalSwiftPackageReference "KawarinKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = KawarinKit;
+		};
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
 		4F27869D2BF373B800E9F5EF /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
@@ -618,6 +925,24 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4F27869D2BF373B800E9F5EF /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
 			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		4FB0000000000000000000AD /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4F27869D2BF373B800E9F5EF /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		4FB0000000000000000000CD /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4F27869D2BF373B800E9F5EF /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		4FB0000000000000000000B1 /* KawarinKitMac */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KawarinKitMac;
+		};
+		4FB0000000000000000000D2 /* KawarinKitIOS */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KawarinKitIOS;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

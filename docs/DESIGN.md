@@ -301,7 +301,7 @@ Mac の仮想カメラとして Zoom・Discord・ブラウザなどに出すア�
 
 ## 15. 多言語
 
-- 文言は最初から String Catalog（`Localizable.xcstrings`）で管理する。日本語と英語を正本にする
+- 文言は最初から String Catalog（`Localizable.xcstrings`）で管理する。日本語と英語を正本にする。コードに書く元の文言は英語にし（`sourceLanguage` は `en`）、日本語は String Catalog の翻訳として持つ
 - 追加する言語の候補: 簡体字中国語・繁体字中国語・韓国語・スペイン語・フランス語・ドイツ語・イタリア語・ポルトガル語（ブラジル）・タイ語・インドネシア語・ベトナム語
 - 訳文の品質はビルドやテストで確かめられないので、ループでは訳を作るまでにして、確認は人が行う（ralph-kit の「ループに向かないタスク」）
 - App Store の掲載情報は `AppStore/languages.json` と `AppStore/metadata/<言語>.json` に足す。審査メモとデモ動画は英語

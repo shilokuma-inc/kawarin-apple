@@ -15,7 +15,7 @@ Mac の仮想カメラとして Zoom・Discord などに出すアプリです（
 ## Environment
 
 - Xcode 26.6
-- iOS 17.0 以上
+- iOS / iPadOS 18.0 以上、macOS 15.0 以上（Apple Silicon のみ）
 - Swift 6（Swift 6 言語モード / Strict Concurrency）
 - SwiftUI / Swift Testing / XCTest（UI テスト）
 - SwiftLint 0.65.1（Build Tool Plugin。バイナリだけを配布する [SwiftLintPlugins](https://github.com/SimplyDanny/SwiftLintPlugins) 経由）

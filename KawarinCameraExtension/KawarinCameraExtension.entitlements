@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- カメラ拡張は App Sandbox が必須 -->
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<!-- Mac アプリと共有する App Group。Info.plist の CMIOExtensionMachServiceName はこの名前で始める -->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>$(TeamIdentifierPrefix)$(APP_BUNDLE_IDENTIFIER)</string>
+	</array>
+</dict>
+</plist>

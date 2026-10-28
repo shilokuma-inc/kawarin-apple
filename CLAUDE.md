@@ -10,15 +10,19 @@ Mac の仮想カメラとして Zoom・Discord などに出すアプリ。設計
 | リポジトリ | `shilokuma-inc/kawarin-apple`（public） |
 | デフォルトブランチ | `develop` |
 | アプリ名 | かわりん -Kawarin-（Swift のモジュール名・ターゲット名は `Kawarin`） |
-| ターゲット | iOS / iPadOS の `Kawarin`（トラッカーと鏡モード）。macOS の `KawarinMac`（描画と仮想カメラ）とカメラ拡張 `KawarinCameraExtension` は土台の作業で足す。visionOS は将来 |
+| ターゲット | iOS / iPadOS の `Kawarin`（トラッカーと鏡モード）、macOS の `KawarinMac`（描画と仮想カメラ。製品名は `Kawarin.app`）、カメラ拡張 `KawarinCameraExtension`（System Extension）。visionOS は将来 |
 | UI フレームワーク | SwiftUI |
 | 言語 / Xcode | Swift 6（Strict Concurrency complete）/ Xcode 26.6 |
-| Deployment Target | iOS 18.0 / macOS 15.0 / visionOS 2.0（土台の作業で合わせる） |
+| Deployment Target | iOS 18.0 / macOS 15.0（Apple Silicon のみ）。visionOS は 2.0 の予定 |
 | Bundle ID | `jp.shilokuma.Kawarin`（iOS と macOS で共通。Universal Purchase）。カメラ拡張は `jp.shilokuma.Kawarin.CameraExtension` |
 
 ## 構成
 
 - `Kawarin/` … iOS / iPadOS のアプリ本体。フォルダ同期グループなので、ファイルの追加・削除で pbxproj を触る必要はない
+- `KawarinMac/` … Mac のアプリ本体（フォルダ同期グループ）。共有スキームは `KawarinMac`
+- `KawarinCameraExtension/` … カメラ拡張（CMIOExtension）。Mac アプリの `Contents/Library/SystemExtensions` に入る
+- `KawarinKit/` … iOS・macOS・visionOS で共有するローカル Swift Package。アプリは `KawarinKitIOS` / `KawarinKitMac` のどちらか 1 つのプロダクトをリンク済みで、
+  モジュールを足すときは `Package.swift` のプロダクトの `targets` に加えるだけでよい（pbxproj の変更は要らない）
 - `KawarinTests/`（Swift Testing）・`KawarinUITests/`（XCTest）… テスト
 - `Configs/*.xcconfig` … Team ID・Bundle ID・バージョン・Deployment Target はここだけを編集する
 - `AppStore/` … App Store の掲載情報（言語・説明文・スクリーンショット・審査メモ）
@@ -30,11 +34,14 @@ Mac の仮想カメラとして Zoom・Discord などに出すアプリ。設計
 swiftlint lint --strict
 xcodebuild -project Kawarin.xcodeproj -scheme Kawarin -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
 xcodebuild test -project Kawarin.xcodeproj -scheme Kawarin -destination 'platform=iOS Simulator,name=iPhone 17 Pro' -only-testing:KawarinTests
+xcodebuild -project Kawarin.xcodeproj -scheme KawarinMac -destination 'platform=macOS' build CODE_SIGNING_ALLOWED=NO
+swift test --package-path KawarinKit
 ```
 
 - Simulator 名は OS 更新で改名されることがある。解決できない場合は `xcrun simctl list devices available` で UDID を調べて `id=` で指定する
 - 複数の worktree で同時にビルドするときは、`-derivedDataPath` を worktree ごとにリポジトリの外へ分ける
 - Simulator では ARKit の顔トラッキングが動かない。トラッキングに関わる処理はプロトコルの後ろに隠し、テストでは記録した観測値の再生に差し替える
+- 「Mac Development」の署名用証明書が無い Mac では、macOS 向けは `CODE_SIGNING_ALLOWED=NO` を付ける。カメラ拡張を実際に有効にするには、署名したアプリを /Applications に置いて起動する（docs/DESIGN.md の「12. 仮想カメラ」）
 
 ## 知見の記録（LEARNINGS.md）
 
