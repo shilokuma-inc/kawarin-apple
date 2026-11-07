@@ -106,12 +106,25 @@ end
 # 追加できなかったときに、原因を追う手がかりを集める（409 の応答には理由が書かれない。shariverse/dokogacha-app-ios#212）。
 # メールアドレス・氏名は出さない。グループは名前を出さず数だけにする（グループ名には氏名などを書けるうえ、
 # ほかのアプリのグループの名前からは公開前のアプリが分かるため。redact が伏せるのは TESTERS のアドレスだけ）
-def failure_hints(email:, app_id:, token:)
-  tester_hints(email: email, app_id: app_id, token: token) + user_hints(email: email, app_id: app_id, token: token)
+def failure_hints(email:, app_id:, token:, deadline:)
+  tester_hints(email: email, app_id: app_id, token: token, deadline: deadline) +
+    user_hints(email: email, app_id: app_id, token: token, deadline: deadline)
 end
 
-# 「見出し: 中身」の 1 行にする。手がかりの取得に失敗しても止めず（API キーの権限が足りない・応答の形が違うなど）、その旨を書く
-def hint(label)
+# 手がかりを取りにいくのは、テスターの追加を始めてからこの秒数のあいだだけにする。
+# API が応答しないと 1 回の呼び出しで最大 40 秒（app_store_connect.rb の open_timeout と read_timeout）待つので、
+# 追加できない人が何人もいるときに待ち時間が積み重なり、ジョブの時間（45 分）をアップロードの前に使い切らないようにする
+HINTS_TIME_LIMIT_SECONDS = 120
+
+def monotonic_now
+  Process.clock_gettime(Process::CLOCK_MONOTONIC)
+end
+
+# 「見出し: 中身」の 1 行にする。手がかりの取得に失敗しても止めず（API キーの権限が足りない・応答の形が違うなど）、その旨を書く。
+# 時間の上限（deadline）を過ぎていたら取りにいかない
+def hint(label, deadline)
+  return "#{label}: 時間の上限（#{HINTS_TIME_LIMIT_SECONDS} 秒）を過ぎたため取得しませんでした" if monotonic_now > deadline
+
   "#{label}: #{yield}"
 rescue ASC::Error => e
   "#{label}: 取得できませんでした（HTTP #{e.status}）"
@@ -121,9 +134,9 @@ end
 
 PERSONAL_ATTRIBUTES = %w[email firstName lastName].freeze
 
-def tester_hints(email:, app_id:, token:)
+def tester_hints(email:, app_id:, token:, deadline:)
   tester = nil
-  record = hint('テスターの記録') do
+  record = hint('テスターの記録', deadline) do
     tester = find_beta_tester(email: email, token: token)
     next 'なし' unless tester
 
@@ -133,7 +146,7 @@ def tester_hints(email:, app_id:, token:)
   end
   return [record] unless tester
 
-  groups = hint('テスターが入っているグループ') do
+  groups = hint('テスターが入っているグループ', deadline) do
     app_groups = ASC.request(:get, '/v1/betaGroups', token: token,
                                                      query: { 'filter[app]' => app_id, 'fields[betaGroups]' => 'isInternalGroup', 'limit' => 200 })
                     .fetch('data').map { |group| group.fetch('id') }
@@ -144,7 +157,7 @@ def tester_hints(email:, app_id:, token:)
     internal = mine.count { |group| group.dig('attributes', 'isInternalGroup') }
     "このアプリは #{mine.size} 件（内部 #{internal} 件・外部 #{mine.size - internal} 件）、ほかのアプリは #{others.size} 件"
   end
-  apps = hint('テスターが入っているアプリ') do
+  apps = hint('テスターが入っているアプリ', deadline) do
     tester_apps = ASC.request(:get, "/v1/betaTesters/#{tester.fetch('id')}/apps", token: token,
                                                                                 query: { 'fields[apps]' => 'bundleId', 'limit' => 200 })
                      .fetch('data')
@@ -153,8 +166,8 @@ def tester_hints(email:, app_id:, token:)
   [record, groups, apps]
 end
 
-def user_hints(email:, app_id:, token:)
-  user_line = hint('App Store Connect のユーザー') do
+def user_hints(email:, app_id:, token:, deadline:)
+  user_line = hint('App Store Connect のユーザー', deadline) do
     user = ASC.request(:get, '/v1/users', token: token, query: {
                          'filter[username]' => email, 'fields[users]' => 'username,roles,allAppsVisible,provisioningAllowed', 'limit' => 200
                        })
@@ -179,7 +192,7 @@ def user_hints(email:, app_id:, token:)
                  end
     "あり（ロール: #{Array(attributes['roles']).join('・')}、#{visibility}、provisioningAllowed: #{attributes['provisioningAllowed'].inspect}）"
   end
-  invitation_line = hint('「ユーザとアクセス」の招待') do
+  invitation_line = hint('「ユーザとアクセス」の招待', deadline) do
     invitations = ASC.request(:get, '/v1/userInvitations', token: token,
                                                            query: { 'filter[email]' => email, 'fields[userInvitations]' => 'email', 'limit' => 200 })
                      .fetch('data')
@@ -222,6 +235,7 @@ begin
   end
 
   current = group_tester_emails(group_id: group.fetch('id'), token: token)
+  hints_deadline = monotonic_now + HINTS_TIME_LIMIT_SECONDS
   testers.each do |tester|
     if current.include?(tester[:email].downcase)
       lines << "- #{tester[:label]}は追加済みです"
@@ -235,7 +249,11 @@ begin
       failures << tester[:label]
       lines << "- #{tester[:label]}を追加できませんでした（HTTP #{e.status}）。App Store Connect の「ユーザとアクセス」に登録されているメールアドレスか確認してください"
       puts "#{tester[:label]}: #{redact(e.message, testers)}"
-      failure_hints(email: tester[:email], app_id: app.fetch('id'), token: token).each do |line|
+      if monotonic_now > hints_deadline
+        lines << "  - 原因の手がかり: 時間の上限（#{HINTS_TIME_LIMIT_SECONDS} 秒）を過ぎたため取得しませんでした"
+        next
+      end
+      failure_hints(email: tester[:email], app_id: app.fetch('id'), token: token, deadline: hints_deadline).each do |line|
         lines << "  - #{redact(line, testers)}"
       end
     end
