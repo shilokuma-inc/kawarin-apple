@@ -104,7 +104,8 @@ def add_tester(email:, group_id:, token:)
 end
 
 # 追加できなかったときに、原因を追う手がかりを集める（409 の応答には理由が書かれない。shariverse/dokogacha-app-ios#212）。
-# メールアドレス・氏名は出さない。ほかのアプリのグループは、名前を出さず数だけにする（公開前のアプリの名前が出ないように）
+# メールアドレス・氏名は出さない。グループは名前を出さず数だけにする（グループ名には氏名などを書けるうえ、
+# ほかのアプリのグループの名前からは公開前のアプリが分かるため。redact が伏せるのは TESTERS のアドレスだけ）
 def failure_hints(email:, app_id:, token:)
   tester_hints(email: email, app_id: app_id, token: token) + user_hints(email: email, app_id: app_id, token: token)
 end
@@ -134,14 +135,14 @@ def tester_hints(email:, app_id:, token:)
 
   groups = hint('テスターが入っているグループ') do
     app_groups = ASC.request(:get, '/v1/betaGroups', token: token,
-                                                     query: { 'filter[app]' => app_id, 'fields[betaGroups]' => 'name,isInternalGroup', 'limit' => 200 })
+                                                     query: { 'filter[app]' => app_id, 'fields[betaGroups]' => 'isInternalGroup', 'limit' => 200 })
                     .fetch('data').map { |group| group.fetch('id') }
     tester_groups = ASC.request(:get, "/v1/betaTesters/#{tester.fetch('id')}/betaGroups", token: token,
-                                                                                        query: { 'fields[betaGroups]' => 'name,isInternalGroup', 'limit' => 200 })
+                                                                                        query: { 'fields[betaGroups]' => 'isInternalGroup', 'limit' => 200 })
                        .fetch('data')
     mine, others = tester_groups.partition { |group| app_groups.include?(group.fetch('id')) }
-    names = mine.map { |group| "「#{group.dig('attributes', 'name')}」（#{group.dig('attributes', 'isInternalGroup') ? '内部' : '外部'}）" }
-    "このアプリは#{names.empty? ? 'なし' : names.join('・')}、ほかのアプリは #{others.size} 件"
+    internal = mine.count { |group| group.dig('attributes', 'isInternalGroup') }
+    "このアプリは #{mine.size} 件（内部 #{internal} 件・外部 #{mine.size - internal} 件）、ほかのアプリは #{others.size} 件"
   end
   apps = hint('テスターが入っているアプリ') do
     tester_apps = ASC.request(:get, "/v1/betaTesters/#{tester.fetch('id')}/apps", token: token,
