@@ -166,10 +166,16 @@ def user_hints(email:, app_id:, token:)
     visibility = if attributes['allAppsVisible']
                    'すべてのアプリを見られる'
                  else
-                   visible = ASC.request(:get, "/v1/users/#{user.fetch('id')}/visibleApps", token: token,
-                                                                                            query: { 'fields[apps]' => 'bundleId', 'limit' => 200 })
-                                .fetch('data').any? { |app| app.fetch('id') == app_id }
-                   visible ? 'このアプリを見られる' : 'このアプリを見られない'
+                   visible_apps = ASC.request(:get, "/v1/users/#{user.fetch('id')}/visibleApps", token: token,
+                                                                                                 query: { 'fields[apps]' => 'bundleId', 'limit' => 200 })
+                   # 次のページがある（見られるアプリが 200 件を超える）ときは、見られないとは言い切らない
+                   if visible_apps.fetch('data').any? { |app| app.fetch('id') == app_id }
+                     'このアプリを見られる'
+                   elsif visible_apps.dig('links', 'next')
+                     '見られるアプリが 200 件を超えるため、このアプリを見られるかは分からない'
+                   else
+                     'このアプリを見られない'
+                   end
                  end
     "あり（ロール: #{Array(attributes['roles']).join('・')}、#{visibility}、provisioningAllowed: #{attributes['provisioningAllowed'].inspect}）"
   end
