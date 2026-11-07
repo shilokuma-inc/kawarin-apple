@@ -30,6 +30,7 @@
 #
 # Ruby の標準ライブラリだけで動く（gem のインストールは不要）。API の共通処理は app_store_connect.rb にある。
 
+require 'timeout'
 require_relative 'app_store_connect'
 
 ASC = AppStoreConnect
@@ -112,7 +113,7 @@ def failure_hints(email:, app_id:, token:, deadline:)
 end
 
 # 手がかりを取りにいくのは、テスターの追加を始めてからこの秒数のあいだだけにする。
-# API が応答しないと 1 回の呼び出しで最大 40 秒（app_store_connect.rb の open_timeout と read_timeout）待つので、
+# API が応答しないと、1 回の呼び出しで open_timeout と read_timeout（app_store_connect.rb）のぶん待ち、少しずつ応答するとさらに長引く。
 # 追加できない人が何人もいるときに待ち時間が積み重なり、ジョブの時間（45 分）をアップロードの前に使い切らないようにする
 HINTS_TIME_LIMIT_SECONDS = 120
 
@@ -121,11 +122,15 @@ def monotonic_now
 end
 
 # 「見出し: 中身」の 1 行にする。手がかりの取得に失敗しても止めず（API キーの権限が足りない・応答の形が違うなど）、その旨を書く。
-# 時間の上限（deadline）を過ぎていたら取りにいかない
+# 時間の上限（deadline）を過ぎていたら取りにいかず、取りにいっている途中で過ぎたら打ち切る
+# （read_timeout は 1 回の読み取りごとの上限なので、期限の直前に始めた呼び出しや少しずつ応答する呼び出しは、それだけでは止まらない）
 def hint(label, deadline)
-  return "#{label}: 時間の上限（#{HINTS_TIME_LIMIT_SECONDS} 秒）を過ぎたため取得しませんでした" if monotonic_now > deadline
+  remaining = deadline - monotonic_now
+  return "#{label}: 時間の上限（#{HINTS_TIME_LIMIT_SECONDS} 秒）を過ぎたため取得しませんでした" if remaining <= 0
 
-  "#{label}: #{yield}"
+  "#{label}: #{Timeout.timeout(remaining) { yield }}"
+rescue Timeout::Error
+  "#{label}: 時間の上限（#{HINTS_TIME_LIMIT_SECONDS} 秒）を過ぎたため、取得を打ち切りました"
 rescue ASC::Error => e
   "#{label}: 取得できませんでした（HTTP #{e.status}）"
 rescue StandardError => e
