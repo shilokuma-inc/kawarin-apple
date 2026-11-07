@@ -34,10 +34,11 @@ require_relative 'app_store_connect'
 
 ASC = AppStoreConnect
 
-# 先頭の 1 文字とドメインだけを残す（例: t***@example.com）。@ が無いなど形が違う値は何も残さない
+# 先頭の 1 文字とドメインだけを残す（例: t***@example.com）。@ が無い・@ のあとがドメインの形でないなど、形が違う値は何も残さない
+# （a@x.com;b@y.com のように区切りを間違えた値で、2 つ目のアドレスがそのまま残らないように）
 def mask_email(email)
   local, domain = email.split('@', 2)
-  return '***' if local.to_s.empty? || domain.to_s.empty?
+  return '***' if local.to_s.empty? || !domain.to_s.match?(/\A[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+\z/)
 
   "#{local[0]}***@#{domain}"
 end
