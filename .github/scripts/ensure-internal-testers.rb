@@ -105,7 +105,7 @@ def add_tester(email:, group_id:, token:)
   end
 end
 
-# 追加できなかったときに、原因を追う手がかりを集める（409 の応答には理由が書かれない。shariverse/dokogacha-app-ios#212）。
+# 追加できなかったときに、原因を追う手がかりを集める（409 の応答には理由が書かれない）。
 # メールアドレス・氏名は出さない。グループは名前を出さず数だけにする（グループ名には氏名などを書けるうえ、
 # ほかのアプリのグループの名前からは公開前のアプリが分かるため。redact が伏せるのは TESTERS のアドレスだけ）
 def failure_hints(email:, app_id:, token:, deadline:)
