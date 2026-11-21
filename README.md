@@ -28,7 +28,6 @@ Mac の仮想カメラとして Zoom・Discord などに出すアプリです（
       <tr>
         <td style="border:2px double #000080;">branch \ workflow</td>
         <td style="border:2px double #000080;">Build</td>
-        <td style="border:2px double #000080;">Archive</td>
         <td style="border:2px double #000080;">Upload</td>
       </tr>
       <tr>
@@ -36,11 +35,6 @@ Mac の仮想カメラとして Zoom・Discord などに出すアプリです（
         <td style="border:2px double #000080;text-align:center;">
           <a href="https://github.com/shilokuma-inc/kawarin-apple/actions/workflows/build.yml?query=branch%3Amain">
             <img src="https://github.com/shilokuma-inc/kawarin-apple/actions/workflows/build.yml/badge.svg?branch=main" alt="Build">
-          </a>
-        </td>
-        <td style="border:2px double #000080;text-align:center;">
-          <a href="https://github.com/shilokuma-inc/kawarin-apple/actions/workflows/archive.yml?query=branch%3Amain">
-            <img src="https://github.com/shilokuma-inc/kawarin-apple/actions/workflows/archive.yml/badge.svg?branch=main" alt="Archive">
           </a>
         </td>
         <td style="border:2px double #000080;text-align:center;">
@@ -52,8 +46,6 @@ Mac の仮想カメラとして Zoom・Discord などに出すアプリです（
           <a href="https://github.com/shilokuma-inc/kawarin-apple/actions/workflows/build.yml?query=branch%3Adevelop">
             <img src="https://github.com/shilokuma-inc/kawarin-apple/actions/workflows/build.yml/badge.svg?branch=develop" alt="Build">
           </a>
-        </td>
-        <td style="border:2px double #000080;text-align:center;">
         </td>
         <td style="border:2px double #000080;text-align:center;">
           <a href="https://github.com/shilokuma-inc/kawarin-apple/actions/workflows/upload.yml?query=branch%3Adevelop">
@@ -142,23 +134,24 @@ Upload ワークフローは、アップロードの前に TestFlight の内部�
 
 ### 6. ブランチ運用と CI
 
-| ブランチ | Build（ビルド + テスト + SwiftLint） | Archive（IPA / pkg の Export） | Upload（App Store Connect。iOS / macOS） |
-|---|:-:|:-:|:-:|
-| `main` | ✅ | ✅ | |
-| `develop` | ✅ | | ✅ |
-| `release/**` | ✅ | | ✅ |
-| その他の作業ブランチ | ✅（Unit テストのみ） | | |
-| Pull Request の作成時（opened / reopened / ready_for_review） | ✅ | | |
-| Fork からの Pull Request | ✅ | | |
+| ブランチ | Build（ビルド + テスト + SwiftLint） | Upload（Archive → IPA / pkg の Export → App Store Connect。iOS / macOS） |
+|---|:-:|:-:|
+| `main` | ✅ | |
+| `develop` | ✅ | ✅ |
+| `release/**` | ✅ | ✅ |
+| その他の作業ブランチ | ✅（Unit テストのみ） | |
+| Pull Request の作成時（opened / reopened / ready_for_review） | ✅ | |
+| Fork からの Pull Request | ✅ | |
 
-- Upload は Archive → IPA Export を含むため、`develop` / `release/**` では Archive を別途実行しません
-- Archive / Upload は Actions タブから手動でも実行できます（Run workflow）。作業ブランチを TestFlight で確認したいときは、Upload を手動実行してそのブランチを選びます
+- `main` への push では Build だけを実行します。`main` には `develop` / `release/**` で Upload（Archive を含む）を通したものがマージされるためです
+- Archive（Export まで。アップロードはしない）は手動実行だけです。Actions タブの Run workflow から、確かめたいブランチを選んで実行します
+- Upload も手動で実行できます。作業ブランチを TestFlight で確認したいときは、Upload を手動実行してそのブランチを選びます
 - リポジトリ変数（Settings → Secrets and variables → Actions → Variables）に `ENABLE_DELIVERY=false` を設定すると Upload をスキップします（Archive は App Store Connect にアプリが無くても通るため止めません）。テンプレートリポジトリ自身はこの設定でアップロードを止めています。テンプレートから作成したリポジトリには引き継がれないため、何もしなければ従来どおり実行されます
 - Archive と Upload は iOS（IPA。スキーム `Kawarin`）と macOS（pkg。スキーム `KawarinMac`、カメラ拡張を含む）を別々のジョブで扱い、macOS が失敗しても iOS は止まりません
 - `ENABLE_MACOS_DELIVERY=false` を設定すると、Upload と Archive の macOS のジョブだけをスキップします。何もしなければ、次のように動きます
   - Upload: App Store Connect のアプリに macOS のプラットフォームがあるかを先に確かめ、無ければ macOS の Archive とアップロードを飛ばします
-  - Archive（`main` への push・手動実行）: プラットフォームの有無を確かめずに、macOS も Archive → pkg の Export まで行います。Mac アプリの署名は API キーの自動署名なので、Apple Developer のアカウントに App ID・プロファイル（足りなければ証明書）が作られることがあります
-- ドキュメントだけの変更（`**/*.md`、`docs/**`）では Build を実行しません。Upload（`develop` / `release/**` への push）と Archive（`main` への push）は、ドキュメントだけの変更でも実行します
+  - Archive（手動実行）: プラットフォームの有無を確かめずに、macOS も Archive → pkg の Export まで行います。Mac アプリの署名は API キーの自動署名なので、Apple Developer のアカウントに App ID・プロファイル（足りなければ証明書）が作られることがあります
+- ドキュメントだけの変更（`**/*.md`、`docs/**`）では Build を実行しません。Upload（`develop` / `release/**` への push）は、ドキュメントだけの変更でも実行します
 - 作業ブランチへの push では、時間のかかる UI テスト（`<プロジェクト名>UITests`）を省いて Unit テストだけ実行します。UI テストは Pull Request の作成時と `main` / `develop` / `release/**` への push で実行します。Fork からの Pull Request は push で実行されないため、更新（synchronize）を含むすべてのイベントで UI テストまで実行します
 - Xcode のバージョンは [.github/workflows/_build.yml](.github/workflows/_build.yml) と [.github/workflows/_archive.yml](.github/workflows/_archive.yml) の `xcode-version` で固定しています。Environment の更新時はあわせて変更してください
 
@@ -300,7 +293,7 @@ API が無い・アカウントで一度だけ行うなど、ワークフロー�
         ├── _build.yml       # 共通処理: ビルド + テスト + SwiftLint（workflow_call）
         ├── _archive.yml     # 共通処理: Archive → Export（→ Upload）（workflow_call）
         ├── build.yml        # 全ブランチの push / Fork からの PR
-        ├── archive.yml      # main の push
+        ├── archive.yml      # Archive → Export の確認（手動実行）
         ├── upload.yml       # develop / release/** の push
         ├── app-store-*.yml  # App Store の掲載情報の反映（手動実行）
         └── verify-app-store-metadata.yml  # 掲載情報の検査（PR）
