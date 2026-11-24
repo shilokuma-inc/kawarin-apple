@@ -75,7 +75,7 @@ scripts/rename.sh MyApp
 - アプリ名は英字で始まる英数字のみです（Swift のモジュール名になります）
 - README のバッジ URL と Discussions の有効化に使うリポジトリ名は `origin` から推定します。別のものを使う場合は第 2 引数で `owner/repo` を渡します
 - 作業ツリーがクリーンな状態で実行し、実行後に `git diff` で差分を確認してコミットしてください
-- テンプレートから作成したリポジトリには Discussions の設定が引き継がれず、無効のままになります（ralph-loop はゴールを Discussion で受け取ります）。スクリプトは `gh repo edit --enable-discussions` で有効にするため、`gh` で認証済みで、リポジトリの管理者権限が必要です
+- テンプレートから作成したリポジトリには Discussions の設定が引き継がれず、無効のままになります（AskHub は依頼と質問を Discussion に写します）。スクリプトは `gh repo edit --enable-discussions` で有効にするため、`gh` で認証済みで、リポジトリの管理者権限が必要です
 - Discussions を有効にできなかったときは、リネームは止めずに警告と手順を表示します。表示された手順で有効にしてください
 
 ### 3. 署名情報を設定する
@@ -134,6 +134,8 @@ Upload ワークフローは、アップロードの前に TestFlight の内部�
 
 ### 6. ブランチ運用と CI
 
+- 作業は `develop` から作業ブランチを切ります。AskHub の epic は、ワーカーが作業ブランチ `askhub/<epic の id>` を `develop` から作り、子 PR をそこに集め、最終 PR で `develop` に取り込みます
+
 | ブランチ | Build（ビルド + テスト + SwiftLint） | Upload（Archive → IPA / pkg の Export → App Store Connect。iOS / macOS） |
 |---|:-:|:-:|
 | `main` | ✅ | |
@@ -141,6 +143,8 @@ Upload ワークフローは、アップロードの前に TestFlight の内部�
 | `release/**` | ✅ | ✅ |
 | その他の作業ブランチ | ✅（Unit テストのみ） | |
 | Pull Request の作成時（opened / reopened / ready_for_review） | ✅ | |
+| AskHub の子 PR（作業ブランチ `askhub/**` 宛て） | PR では実行しない（push の Unit テストだけ） | |
+| AskHub の最終 PR（`askhub/**` → `develop`） | ✅（更新のたびに UI テストまで） | |
 | Fork からの Pull Request | ✅ | |
 
 - `main` への push では Build だけを実行します。`main` には `develop` / `release/**` で Upload（Archive を含む）を通したものがマージされるためです
@@ -152,7 +156,7 @@ Upload ワークフローは、アップロードの前に TestFlight の内部�
   - Upload: App Store Connect のアプリに macOS のプラットフォームがあるかを先に確かめ、無ければ macOS の Archive とアップロードを飛ばします
   - Archive（手動実行）: プラットフォームの有無を確かめずに、macOS も Archive → pkg の Export まで行います。Mac アプリの署名は API キーの自動署名なので、Apple Developer のアカウントに App ID・プロファイル（足りなければ証明書）が作られることがあります
 - ドキュメントだけの変更（`**/*.md`、`docs/**`）では Build を実行しません。Upload（`develop` / `release/**` への push）は、ドキュメントだけの変更でも実行します
-- 作業ブランチへの push では、時間のかかる UI テスト（`<プロジェクト名>UITests`）を省いて Unit テストだけ実行します。UI テストは Pull Request の作成時と `main` / `develop` / `release/**` への push で実行します。Fork からの Pull Request は push で実行されないため、更新（synchronize）を含むすべてのイベントで UI テストまで実行します
+- 作業ブランチへの push では、時間のかかる UI テスト（`<プロジェクト名>UITests`）を省いて Unit テストだけ実行します。UI テストは Pull Request の作成時と `main` / `develop` / `release/**` への push で実行します。AskHub の子 PR（`askhub/**` 宛て）は PR のイベントでは実行せず（ワーカーが手元でテストを流してから出すため）、作業ブランチ → `develop` の最終 PR は更新（synchronize）でも UI テストまで実行します。Fork からの Pull Request は push で実行されないため、更新（synchronize）を含むすべてのイベントで UI テストまで実行します
 - Xcode のバージョンは [.github/workflows/_build.yml](.github/workflows/_build.yml) と [.github/workflows/_archive.yml](.github/workflows/_archive.yml) の `xcode-version` で固定しています。Environment の更新時はあわせて変更してください
 
 ### 7. PR 本文のスクリーンショット
