@@ -24,3 +24,10 @@ MACOSX_DEPLOYMENT_TARGET = 15.0
 
 // Mac 版は Apple Silicon のみ（Intel Mac の検証をしないため）
 ARCHS[sdk=macosx*] = arm64
+
+// Mac アプリ（KawarinMac）の entitlements。カメラ拡張を入れる com.apple.developer.system-extension.install と App Group は
+// provisioning profile が要り、profile の無いアドホック署名では「requires a provisioning profile」でビルドが止まる。
+// app-kit の macOS の Archive はアドホック署名（CODE_SIGN_STYLE=Manual）にするので、自動の署名（Xcode が profile を用意する）のときだけ付ける。
+// 配布（TestFlight・App Store）の Archive には、app-kit が Archive の後に、自動の署名で読んだこのファイルの項目を足す
+KAWARIN_MAC_ENTITLEMENTS_Automatic = KawarinMac/KawarinMac.entitlements
+KAWARIN_MAC_ENTITLEMENTS_Manual =

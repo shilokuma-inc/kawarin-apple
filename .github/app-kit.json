@@ -1,0 +1,13 @@
+{
+  "v": 1,
+  "project": "Kawarin.xcodeproj",
+  "scheme": "Kawarin",
+  "schemes": { "macOS": "KawarinMac" },
+  "platforms": ["iOS", "macOS"],
+  "generate": null,
+  "uiTests": "KawarinUITests",
+  "xcodeVersion": null,
+  "swiftPackages": ["KawarinKit"],
+  "archive": { "platforms": ["iOS", "macOS"] },
+  "unmanaged": []
+}
